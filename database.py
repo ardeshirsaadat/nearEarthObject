@@ -12,6 +12,7 @@ data on NEOs and close approaches extracted by `extract.load_neos` and
 You'll edit this file in Tasks 2 and 3.
 """
 
+
 class NEODatabase:
     """A database of near-Earth objects and their close approaches.
 
@@ -20,6 +21,7 @@ class NEODatabase:
     help fetch NEOs by primary designation or by name and to help speed up
     querying for close approaches that match criteria.
     """
+
     def __init__(self, neos, approaches):
         """Create a new `NEODatabase`.
 
@@ -40,6 +42,17 @@ class NEODatabase:
         """
         self._neos = neos
         self._approaches = approaches
+        self.auxiliary = {}
+        for neo in self._neos:
+            if neo.designation not in self.auxiliary:
+                self.auxiliary[neo.designation] = neo
+            if neo.name not in self.auxiliary:
+                self.auxiliary[neo.name] = neo
+        for approach in self._approaches:
+            if approach._designation in self.auxiliary:
+                approach.neo = self.auxiliary[approach._designation]
+                self.auxiliary[approach._designation].approaches.append(
+                    approach)
 
         # TODO: What additional auxiliary data structures will be useful?
 
@@ -59,6 +72,8 @@ class NEODatabase:
         :return: The `NearEarthObject` with the desired primary designation, or `None`.
         """
         # TODO: Fetch an NEO by its primary designation.
+        if designation in self.auxiliary:
+            return self.auxiliary[designation]
         return None
 
     def get_neo_by_name(self, name):
@@ -76,6 +91,8 @@ class NEODatabase:
         :return: The `NearEarthObject` with the desired name, or `None`.
         """
         # TODO: Fetch an NEO by its name.
+        if name in self.auxiliary:
+            return self.auxiliary[name]
         return None
 
     def query(self, filters=()):
