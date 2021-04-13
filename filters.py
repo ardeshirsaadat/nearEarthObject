@@ -38,6 +38,7 @@ class AttributeFilter:
     Concrete subclasses can override the `get` classmethod to provide custom
     behavior to fetch a desired attribute from the given `CloseApproach`.
     """
+
     def __init__(self, op, value):
         """Construct a new `AttributeFilter` from an binary predicate and a reference value.
 
@@ -70,6 +71,36 @@ class AttributeFilter:
 
     def __repr__(self):
         return f"{self.__class__.__name__}(op=operator.{self.op.__name__}, value={self.value})"
+
+
+class dateFilter(AttributeFilter):
+    @classmethod
+    def get(cls, approach):
+        return approach.time.date()
+
+
+class distanceFilter(AttributeFilter):
+    @classmethod
+    def get(cls, approach):
+        return approach.distance
+
+
+class velocityFilter(AttributeFilter):
+    @classmethod
+    def get(cls, approach):
+        return approach.velocity
+
+
+class diameterFilter(AttributeFilter):
+    @classmethod
+    def get(cls, approach):
+        return approach.neo.diameter
+
+
+class hazardousFilter(AttributeFilter):
+    @classmethod
+    def get(cls, approach):
+        return approach.neo.hazardous
 
 
 def create_filters(date=None, start_date=None, end_date=None,
@@ -106,8 +137,31 @@ def create_filters(date=None, start_date=None, end_date=None,
     :param hazardous: Whether the NEO of a matching `CloseApproach` is potentially hazardous.
     :return: A collection of filters for use with `query`.
     """
+    # for this part I got help from a peer student via his github "https://github.com/Octopus-free/near-earth-objects/blob/master/filters.py"
     # TODO: Decide how you will represent your filters.
-    return ()
+    filters = []
+    for key, value in locals().items():
+        if key == 'date' and key:
+            filters.append(dateFilter(operator.eq, value))
+        elif key == 'start_date' and key:
+            filters.append(dateFilter(operator.ge, value))
+        elif key == 'end_date' and key:
+            filters.append(dateFilter(operator.le, value))
+        elif key == 'distance_min' and key:
+            filters.append(distanceFilter(operator.ge, value))
+        elif key == 'distance_max' and key:
+            filters.append(distanceFilter(operator.le, value))
+        elif key == 'velocity_min' and key:
+            filters.append(velocityFilter(operator.ge, value))
+        elif key == 'velocity_max' and key:
+            filters.append(velocityFilter(operator.le, value))
+        elif key == 'diameter_min' and key:
+            filters.append(diameterFilter(operator.ge, value))
+        elif key == 'diameter_max' and key:
+            filters.append(diameterFilter(operator.le, value))
+        elif key == 'hazardous' and key != None:
+            filters.append(hazardous(operator.eq, value))
+    return filters
 
 
 def limit(iterator, n=None):

@@ -46,9 +46,11 @@ class NearEarthObject:
         # handle any edge cases, such as a empty name being represented by `None`
         # and a missing diameter being represented by `float('nan')`.
         self.designation = info['pdes']
-        self.name = info.get("name", None)
-        self.diameter = info.get("diameter", float("nan"))
-        self.hazardous = info.get("pha", False)
+        self.name = None if len(info['name']) == 0 else info['name']
+        self.diameter = float('nan') if len(
+            info['diameter']) == 0 else float(info['diameter'])
+        self.hazardous = False if info['pha'] == 'N' or len(
+            info['pha']) == 0 else True
 
         # Create an empty initial collection of linked approaches.
         self.approaches = []
@@ -64,7 +66,7 @@ class NearEarthObject:
         # TODO: Use this object's attributes to return a human-readable string representation.
         # The project instructions include one possibility. Peek at the __repr__
         # method for examples of advanced string formatting.
-        if self.hazardous:
+        if self.hazardous == "Y":
             return f"A NearEarthObject {self.fullname} has a diameter of {self.diameter} km and is potentially hazardous."
         else:
             return f"A NearEarthObject {self.fullname} has a diameter of {self.diameter} km and is not potentially hazardous."
@@ -103,8 +105,10 @@ class CloseApproach:
         self._designation = info['des']
         # TODO: Use the cd_to_datetime function for this attribute.
         self.time = cd_to_datetime(info.get('cd'))
-        self.distance = info.get('dist', float('nan'))
-        self.velocity = info.get('v_rel', float('nan'))
+        self.distance = float('nan') if len(
+            info['dist']) == 0 else float(info['dist'])
+        self.velocity = float('nan') if len(
+            info['v_rel']) == 0 else float(info['v_rel'])
 
         # Create an attribute for the referenced NEO, originally None.
         self.neo = None
