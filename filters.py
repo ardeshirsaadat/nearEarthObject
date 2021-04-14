@@ -180,7 +180,8 @@ def create_filters(
     :param hazardous: Whether the NEO of a matching `CloseApproach` is potentially hazardous.
     :return: A collection of filters for use with `query`.
     """
-    # for this part I got help from a peer student via his github "https://github.com/Octopus-free/near-earth-objects/blob/master/filters.py"
+    # for this part I got help from a peer student via his github
+    # "https://github.com/Octopus-free/near-earth-objects/blob/master/filters.py"
     filters = []
     for key, value in locals().items():
         if key == "date" and value:
@@ -201,7 +202,7 @@ def create_filters(
             filters.append(diameterFilter(operator.ge, value))
         elif key == "diameter_max" and value:
             filters.append(diameterFilter(operator.le, value))
-        elif key == "hazardous" and value != None:
+        elif key == "hazardous" and value is not None:
             filters.append(hazardousFilter(operator.eq, value))
     return filters
 

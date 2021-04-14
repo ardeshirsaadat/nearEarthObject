@@ -38,17 +38,14 @@ class NearEarthObject:
 
         :param info: A dictionary of excess keyword arguments supplied to the constructor.
         """
-        # TODO: Assign information from the arguments passed to the constructor
-        # onto attributes named `designation`, `name`, `diameter`, and `hazardous`.
-        # You should coerce these values to their appropriate data type and
-        # handle any edge cases, such as a empty name being represented by `None`
-        # and a missing diameter being represented by `float('nan')`.
         self.designation = info["pdes"]
         self.name = None if len(info["name"]) == 0 else info["name"]
         self.diameter = (
-            float("nan") if len(info["diameter"]) == 0 else float(info["diameter"])
-        )
-        self.hazardous = False if info["pha"] == "N" or len(info["pha"]) == 0 else True
+            float("nan") if len(
+                info["diameter"]) == 0 else float(
+                info["diameter"]))
+        self.hazardous = False if info["pha"] == "N" or len(
+            info["pha"]) == 0 else True
 
         # Create an empty initial collection of linked approaches.
         self.approaches = []
@@ -71,8 +68,7 @@ class NearEarthObject:
         """Return `repr(self)`, a computer-readable string representation of this object."""
         return (
             f"NearEarthObject(designation={self.designation!r}, name={self.name!r}, "
-            f"diameter={self.diameter:.3f}, hazardous={self.hazardous!r})"
-        )
+            f"diameter={self.diameter:.3f}, hazardous={self.hazardous!r})")
 
 
 class CloseApproach:
@@ -96,9 +92,10 @@ class CloseApproach:
         """
 
         self._designation = info["des"]
-        # TODO: Use the cd_to_datetime function for this attribute.
         self.time = cd_to_datetime(info.get("cd"))
-        self.distance = float("nan") if len(info["dist"]) == 0 else float(info["dist"])
+        self.distance = float("nan") if len(
+            info["dist"]) == 0 else float(
+            info["dist"])
         self.velocity = (
             float("nan") if len(info["v_rel"]) == 0 else float(info["v_rel"])
         )
@@ -131,5 +128,4 @@ class CloseApproach:
         """Return `repr(self)`, a computer-readable string representation of this object."""
         return (
             f"CloseApproach(time={self.time_str!r}, distance={self.distance:.2f}, "
-            f"velocity={self.velocity:.2f}, neo={self.neo!r})"
-        )
+            f"velocity={self.velocity:.2f}, neo={self.neo!r})")
