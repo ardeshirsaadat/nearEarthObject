@@ -75,40 +75,82 @@ class AttributeFilter:
 
 
 class dateFilter(AttributeFilter):
+    """A subClass of AttributeFilter to filter user's argumest of date,start_date,end_date"""
+
     @classmethod
     def get(cls, approach):
+        """
+        :param approach:A `CloseApproach` on which to evaluate this filter
+        :return : value of CloseApproach's date attribute
+
+        """
         return approach.time.date()
 
 
 class distanceFilter(AttributeFilter):
+    """A subClass of AttributeFilter to filter user's argumest of distance_min,distance_max"""
+
     @classmethod
     def get(cls, approach):
+        """
+        :param approach:A `CloseApproach` on which to evaluate this filter
+        :return : value of CloseApproach's distance attribute
+
+        """
         return approach.distance
 
 
 class velocityFilter(AttributeFilter):
+    """A subClass of AttributeFilter to filter user's argumest of velocity_min,velocity_max"""
+
     @classmethod
     def get(cls, approach):
+        """
+        :param approach:A `CloseApproach` on which to evaluate this filter
+        :return : value of CloseApproach's velocity attribute
+
+        """
         return approach.velocity
 
 
 class diameterFilter(AttributeFilter):
+    """A subClass of AttributeFilter to filter user's argumest of diameter_min,diameter_max"""
+
     @classmethod
     def get(cls, approach):
+        """
+        :param approach:A `CloseApproach` on which to evaluate this filter
+        :return : value of CloseApproach's diameter attribute
+
+        """
         return approach.neo.diameter
 
 
 class hazardousFilter(AttributeFilter):
+    """A subClass of AttributeFilter to filter user's argumest hazardous"""
+
     @classmethod
     def get(cls, approach):
+        """
+        :param approach:A `CloseApproach` on which to evaluate this filter
+        :return : value of CloseApproach's hazardous attribute
+
+        """
         return approach.neo.hazardous
 
 
-def create_filters(date=None, start_date=None, end_date=None,
-                   distance_min=None, distance_max=None,
-                   velocity_min=None, velocity_max=None,
-                   diameter_min=None, diameter_max=None,
-                   hazardous=None):
+def create_filters(
+    date=None,
+    start_date=None,
+    end_date=None,
+    distance_min=None,
+    distance_max=None,
+    velocity_min=None,
+    velocity_max=None,
+    diameter_min=None,
+    diameter_max=None,
+    hazardous=None,
+):
     """Create a collection of filters from user-specified criteria.
 
     Each of these arguments is provided by the main module with a value from the
@@ -139,28 +181,27 @@ def create_filters(date=None, start_date=None, end_date=None,
     :return: A collection of filters for use with `query`.
     """
     # for this part I got help from a peer student via his github "https://github.com/Octopus-free/near-earth-objects/blob/master/filters.py"
-    # TODO: Decide how you will represent your filters.
     filters = []
     for key, value in locals().items():
-        if key == 'date' and value:
+        if key == "date" and value:
             filters.append(dateFilter(operator.eq, value))
-        elif key == 'start_date' and value:
+        elif key == "start_date" and value:
             filters.append(dateFilter(operator.ge, value))
-        elif key == 'end_date' and value:
+        elif key == "end_date" and value:
             filters.append(dateFilter(operator.le, value))
-        elif key == 'distance_min' and value:
+        elif key == "distance_min" and value:
             filters.append(distanceFilter(operator.ge, value))
-        elif key == 'distance_max' and value:
+        elif key == "distance_max" and value:
             filters.append(distanceFilter(operator.le, value))
-        elif key == 'velocity_min' and value:
+        elif key == "velocity_min" and value:
             filters.append(velocityFilter(operator.ge, value))
-        elif key == 'velocity_max' and value:
+        elif key == "velocity_max" and value:
             filters.append(velocityFilter(operator.le, value))
-        elif key == 'diameter_min' and value:
+        elif key == "diameter_min" and value:
             filters.append(diameterFilter(operator.ge, value))
-        elif key == 'diameter_max' and value:
+        elif key == "diameter_max" and value:
             filters.append(diameterFilter(operator.le, value))
-        elif key == 'hazardous' and value != None:
+        elif key == "hazardous" and value != None:
             filters.append(hazardousFilter(operator.eq, value))
     return filters
 
@@ -174,7 +215,6 @@ def limit(iterator, n=None):
     :param n: The maximum number of values to produce.
     :yield: The first (at most) `n` values from the iterator.
     """
-    # TODO: Produce at most `n` values from the given iterator.
     if n == 0 or n is None:
         return islice(iterator, None)
     return islice(iterator, 0, n)
