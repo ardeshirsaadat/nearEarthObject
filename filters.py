@@ -17,6 +17,7 @@ iterator.
 You'll edit this file in Tasks 3a and 3c.
 """
 import operator
+from itertools import islice
 
 
 class UnsupportedCriterionError(NotImplementedError):
@@ -141,26 +142,26 @@ def create_filters(date=None, start_date=None, end_date=None,
     # TODO: Decide how you will represent your filters.
     filters = []
     for key, value in locals().items():
-        if key == 'date' and key:
+        if key == 'date' and value:
             filters.append(dateFilter(operator.eq, value))
-        elif key == 'start_date' and key:
+        elif key == 'start_date' and value:
             filters.append(dateFilter(operator.ge, value))
-        elif key == 'end_date' and key:
+        elif key == 'end_date' and value:
             filters.append(dateFilter(operator.le, value))
-        elif key == 'distance_min' and key:
+        elif key == 'distance_min' and value:
             filters.append(distanceFilter(operator.ge, value))
-        elif key == 'distance_max' and key:
+        elif key == 'distance_max' and value:
             filters.append(distanceFilter(operator.le, value))
-        elif key == 'velocity_min' and key:
+        elif key == 'velocity_min' and value:
             filters.append(velocityFilter(operator.ge, value))
-        elif key == 'velocity_max' and key:
+        elif key == 'velocity_max' and value:
             filters.append(velocityFilter(operator.le, value))
-        elif key == 'diameter_min' and key:
+        elif key == 'diameter_min' and value:
             filters.append(diameterFilter(operator.ge, value))
-        elif key == 'diameter_max' and key:
+        elif key == 'diameter_max' and value:
             filters.append(diameterFilter(operator.le, value))
-        elif key == 'hazardous' and key != None:
-            filters.append(hazardous(operator.eq, value))
+        elif key == 'hazardous' and value != None:
+            filters.append(hazardousFilter(operator.eq, value))
     return filters
 
 
@@ -174,4 +175,7 @@ def limit(iterator, n=None):
     :yield: The first (at most) `n` values from the iterator.
     """
     # TODO: Produce at most `n` values from the given iterator.
-    return iterator
+    if n == 0 or n is None:
+        return iterator
+    limit = tuple(islice(iterator, 0, n))
+    return limit
