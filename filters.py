@@ -176,6 +176,5 @@ def limit(iterator, n=None):
     """
     # TODO: Produce at most `n` values from the given iterator.
     if n == 0 or n is None:
-        return iterator
-    limit = tuple(islice(iterator, 0, n))
-    return limit
+        return islice(iterator, None)
+    return islice(iterator, 0, n)
